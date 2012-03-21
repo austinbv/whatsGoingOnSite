@@ -55,10 +55,6 @@ CalApp.AppRouter = Backbone.Router.extend({
     window.location = 'https://accounts.google.com/o/oauth2/auth?' + $.param(queryString)
   },
 
-  googleAuth:function () {
-
-  },
-
   _parseQuery:function () {
     var result = {}, queryString = location.hash.substring(1),
       re = /([^&=]+)=([^&]*)/g, m;
