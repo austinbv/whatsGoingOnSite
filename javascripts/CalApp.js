@@ -17,13 +17,13 @@ CalApp.AppRouter = Backbone.Router.extend({
 
   rerouter:function () {
     if (window.location.hash.length > 0) {
-      localStorage.setItem('accessToken', this._parseQuery()['access_token'].toString());
+      sessionStorage.setItem('accessToken', this._parseQuery()['access_token'].toString());
       CalApp.Router.navigate('', {trigger:true})
-    } else if (localStorage.getItem('accessToken') && localStorage.getItem('accessToken').length > 0) {
+    } else if (sessionStorage.getItem('accessToken') && sessionStorage.getItem('accessToken').length > 0) {
       $.ajax({
         url:"https://www.googleapis.com/oauth2/v1/tokeninfo",
         data:{
-          access_token:localStorage.getItem('accessToken'),
+          access_token:sessionStorage.getItem('accessToken'),
         },
         method:'GET',
         dataType:'jsonp',
@@ -167,7 +167,7 @@ CalApp.Collections = {
         data = {
           pp:1,
           key:CalApp.API_KEY,
-          access_token:localStorage.getItem('accessToken')
+          access_token:sessionStorage.getItem('accessToken')
         },
         callback = "&callback=?"
 
@@ -217,7 +217,7 @@ CalApp.Collections = {
           timeMin:today.toISOString(),
           pp:100,
           key:CalApp.APIKEY,
-          access_token:localStorage.getItem('accessToken')
+          access_token:sessionStorage.getItem('accessToken')
         }
 
       return baseUrl + '/' + calendar + '/' + rest + '?' + $.param(queryString) + '&callback=?';
