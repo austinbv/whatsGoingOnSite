@@ -47,7 +47,7 @@ CalApp.AppRouter = Backbone.Router.extend({
     var queryString = {
       scope:'https://www.googleapis.com/auth/calendar.readonly',
       state:'ok',
-      redirect_uri:window.location.origin,
+      redirect_uri:window.location.origin + window.location.pathname,
       response_type:'token',
       client_id:'533339277613.apps.googleusercontent.com'
     };
