@@ -1,0 +1,106 @@
+
+@import url('http://fonts.googleapis.com/css?family=Poiret+One|Ledger');
+@background: #996633;
+
+body {
+  box-sizing: border-box;
+  background: @background;
+  width: 100%;
+  overflow: hidden;
+  padding: 2px;
+}
+
+#header {
+  font-family: 'Poiret One', cursive;
+  top: 0;
+  width: 100%;
+}
+
+#date {
+  background: lighten(hsl(0,0,0),20%);
+  color: #e4d7c9;
+  text-align: center;
+  padding: px;
+  margin-bottom: 5px;
+  height: 80px;
+}
+
+#calendar-picker {
+  position: absolute;
+  top: 3%;
+  right: 3%;
+}
+
+#hour-labels {
+  font-family: 'Ledger', serif;
+  display: table;
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+  table-layout: fixed;
+
+  li {
+    display: table-cell;
+  }
+}
+
+#calendar {
+  position: relative;
+  background: @background;
+
+  ul {
+    display: table;
+    height: 100%;
+    width: 100%;
+    table-layout: fixed;
+
+    li {
+      box-sizing: border-box;
+      text-indent: -9999px;
+      border-left: 1px solid lighten(@background, 10%);
+      border-top: 1px solid lighten(@background, 10%);
+      border-bottom: 1px solid lighten(@background, 10%);
+      display: table-cell;
+      background-color: @background;
+
+      &:first-of-type {
+        border-left: none;
+      }
+
+      li {
+        border-top: none;
+        border-bottom: none;
+        border-color: lighten(@background, 30%);
+      }
+      li:first-of-type{
+        border: none
+      }
+    }
+  }
+}
+
+.event {
+  box-sizing: border-box;
+  background-color: rgba(153, 102, 51, 0.5);
+  border-radius: 10px;
+  border: darken(@background, 50%)5px solid;
+  color: white;
+}
+
+#time-line {
+  position: absolute;
+  width: 1px;
+  top: 0;
+  bottom:0;
+  border: 1px solid red;
+  background: red;
+  z-index: 1000;
+}
+
+.clear {
+  clear: both;
+}
+
+#footer {
+  height: 50px;
+}
