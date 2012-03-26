@@ -267,7 +267,7 @@
         this.collection.on('all', this.render, this);
         this.collection.fetch({
           success:function () {
-            this.trigger('change');
+            that.trigger('change');
           },
 
           error:function () {
