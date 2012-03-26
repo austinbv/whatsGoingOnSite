@@ -6,10 +6,6 @@
       CalApp.Router = new CalApp.AppRouter();
       Backbone.history.start();
 
-      $('#calendar-picker-wrap').click(function () {
-        $('#calendar-picker').trigger('click');
-      });
-
       CalApp.Helpers.resize();
 
       $(window).resize(function () {
@@ -34,17 +30,17 @@
     save_state_and_login:function (element) {
       var $element = $(element);
       CalApp.Helpers.save_state(element);
-//    CalApp.Router.navigate('login', {trigger:true});
+      CalApp.Router.navigate('login', {trigger:true});
     }
   };
 
   CalApp.AppRouter = Backbone.Router.extend({
     routes:{
       'login':'login',
-      '*catchAll':'rerouter'
+      '*catchAll':'router'
     },
 
-    rerouter:function () {
+    router:function () {
       if (window.location.hash.length > 0) {
         sessionStorage.setItem('accessToken', this._parseQuery().access_token.toString());
         CalApp.Router.navigate('', {trigger:true});
@@ -63,8 +59,8 @@
           },
 
           success:function () {
-            new CalApp.Views.HeaderView();
-//          new CalApp.Views.CurrentTime();
+            CalApp.header = new CalApp.Views.HeaderView();
+            CalApp.currentTime = new CalApp.Views.CurrentTime();
           }
         });
 
@@ -194,10 +190,6 @@
     Calendars:Backbone.Collection.extend({
       model:CalApp.Models.Calendar,
 
-      events:{
-
-      },
-
       url:function () {
         var baseUrl = 'https://www.googleapis.com/calendar/v3/users/me/calendarList?',
           data = {
@@ -264,8 +256,10 @@
     CalendarsSelectView:Backbone.View.extend({
       el:'#calendar-picker',
       events:{
-        'change':'renderMeetings'
+        '#calendar-picker-wrap click':'openCalendarPicker',
+        'change':'calendarSelected'
       },
+
       initialize:function () {
         var that = this;
         this.collection = new CalApp.Collections.Calendars();
@@ -273,7 +267,7 @@
         this.collection.on('all', this.render, this);
         this.collection.fetch({
           success:function () {
-            $(that.el).trigger('change');
+            this.trigger('change');
           },
 
           error:function () {
@@ -282,7 +276,7 @@
         });
 
         $(window).resize(function () {
-          $(that.el).trigger('change');
+          this.trigger('change');
         });
       },
 
@@ -296,9 +290,13 @@
         return this;
       },
 
-      renderMeetings:function (calendar) {
+      calendarSelected:function () {
         CalApp.Helpers.save_state(this.el);
         CalApp.meetings = new CalApp.Views.MeetingView();
+      },
+
+      openCalendarPicker:function () {
+        $(this.el).trigger('click');
       }
     }),
 
@@ -311,11 +309,10 @@
 
         this.collection.on('all', this.render, this);
         this.collection.fetch({
-          error:function (x) {
+          error:function () {
             CalApp.Helpers.save_state_and_login($('#calendar-picker'));
           }
         });
-        this.render();
 
         setInterval(function () {
           that.collection.fetch();
@@ -346,7 +343,7 @@
         this.model = new CalApp.Models.Clock();
         this.model.on('all', this.render, this);
         this.render();
-        new CalApp.Views.CalendarsSelectView();
+        this.views = [new CalApp.Views.CalendarsSelectView()];
       },
 
       render:function () {
@@ -380,6 +377,7 @@
 
       calculateOffset:function () {
         var secondsIntoTheDay = ((this.model.get('hour') - 8) * 60 * 60) + (this.model.get('minute') * 60) + (this.model.get('second'));
+//        var secondsIntoTheDay = ((8 - 8) * 60 * 60) + (20 * 60) + (30);
 
         var amountOfDayUsed = secondsIntoTheDay / (60 * 60 * 9);
         return $('#calendar').height() * amountOfDayUsed;
