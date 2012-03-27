@@ -256,7 +256,7 @@
     CalendarsSelectView:Backbone.View.extend({
       el:'#calendar-picker',
       events:{
-        '#calendar-picker-wrap click':'openCalendarPicker',
+        'click #calendar-picker-wrap':'openCalendarPicker',
         'change':'calendarSelected'
       },
 
@@ -276,7 +276,7 @@
         });
 
         $(window).resize(function () {
-          this.trigger('change');
+          that.trigger('change');
         });
       },
 
@@ -296,6 +296,7 @@
       },
 
       openCalendarPicker:function () {
+        console.log('clicked')
         $(this.el).trigger('click');
       }
     }),
