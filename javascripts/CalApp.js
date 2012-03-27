@@ -267,7 +267,7 @@
         this.collection.on('all', this.render, this);
         this.collection.fetch({
           success:function () {
-            that.trigger('change');
+            that.$el.trigger('change');
           },
 
           error:function () {
@@ -276,7 +276,7 @@
         });
 
         $(window).resize(function () {
-          that.trigger('change');
+          that.$el.trigger('change');
         });
       },
 
@@ -291,6 +291,7 @@
       },
 
       calendarSelected:function () {
+        console.log('called');
         CalApp.Helpers.save_state(this.el);
         CalApp.meetings = new CalApp.Views.MeetingView();
       },
